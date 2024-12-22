@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Shooter Game</title>
+  <style>
+    html { font-size: 95%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      position: relative;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #gameArea {
+      position: fixed;
+      top: 0;
+      width: 26rem;
+      height: 46rem;
+      background-color: lightgray;
+      overflow: hidden;
+      display: none; /* Hide initially */
+    }
+    #player {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: red;
+      bottom: 20px;
+      box-shadow: 0 2rem 1rem #ffdc00;
+      left: calc(50% - 15px);
+    }
+    .bullet {
+      width: 10px;
+      height: 10px;
+      border-radius: 2rem 2rem 0 0;
+      box-shadow: 0 2rem 1rem yellow;
+      background-color: red;
+      position: absolute;
+    }
+    .bullet2 {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border-radius: 3rem 3rem 0 0;
+      box-shadow: 0 2rem 1rem #ffb200d8;
+      background: blue;
+      animation: move 25s ease-out infinite;
+    }
+    @keyframes move {
+      0% { top: 0rem; }
+      100% { top: 200rem; }
+    }
+    .rock {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: grey;
+      animation: move 35s ease-out infinite;
+    }
+    #score {
+      position: relative;
+      color: black;
+      font-size: 1.5rem;
+      left: 2rem;
+    }
+    .hscore {
+      position: fixed;
+      color: goldenrod;
+      font-size: 1.5rem;
+      top: 0rem;
+      left: 15rem;
+    }
+    #playButton, #pauseButton, #start {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      position: fixed;
+    }
+    #playButton:hover, #pauseButton:hover, #start:hover {
+      background-color: #45a049;
+    }
+    #start {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    #pauseButton {
+      bottom: 20px;
+      left: 10px;
+      display: none; /* Hide initially */
+    }
+    #playButton {
+      bottom: 20px;
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <button id="start">Start Game</button>
+  <div id="gameArea">
+    <div id="player"></div>
+    <div id="score">Score: 00</div>
+    <div class="hscore">High Score: 1500</div>
+    <button id="pauseButton">Pause</button>
+    <button id="playButton">Sound</button>
+    <audio id="music" src="music1.mp3" loop></audio>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
