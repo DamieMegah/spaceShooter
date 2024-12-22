@@ -11,10 +11,14 @@ const audio = document.getElementById('music');
 const startButton = document.getElementById('start');
 const playButton = document.getElementById('playButton');
 const pauseButton = document.getElementById('pauseButton');
+const shootSound = new Audio('boss.mp3');
+const hitSound = new Audio('hit.mp3');
+const gameOverSound = new Audio('gameover.mp3');
 let gameInterval;
 let createRockInterval;
 let createBullet2Interval;
 let rockSpeed = 1;
+
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
 window.addEventListener('keyup', (e) => (keys[e.key] = false));
@@ -24,15 +28,19 @@ window.addEventListener('touchend', handleTouchEnd);
 startButton.addEventListener('click', startGame);
 playButton.addEventListener('click', toggleSound);
 pauseButton.addEventListener('click', togglePause);
+
 function handleTouchStart(e) {
   touchX = e.touches[0].clientX;
 }
+
 function handleTouchMove(e) {
   touchX = e.touches[0].clientX;
 }
+
 function handleTouchEnd() {
   touchX = null;
 }
+
 function createBullet() {
   const bullet = document.createElement('div');
   bullet.className = 'bullet';
@@ -40,7 +48,9 @@ function createBullet() {
   bullet.style.bottom = `${gameArea.offsetHeight - player.offsetTop - player.offsetHeight}px`;
   gameArea.appendChild(bullet);
   bullets.push(bullet);
+  
 }
+
 function createRock() {
   const x = Math.random() * (gameArea.offsetWidth - 50);
   const rock = document.createElement('div');
@@ -50,6 +60,7 @@ function createRock() {
   gameArea.appendChild(rock);
   rocks.push(rock);
 }
+
 function moveRocks() {
   rocks.forEach((rock, index) => {
     rock.style.top = `${rock.offsetTop + rockSpeed}rem`;
@@ -59,6 +70,7 @@ function moveRocks() {
     }
   });
 }
+
 function createBullet2() {
   for (let i = 0; i < 1; i++) {
     const x = Math.random() * (gameArea.offsetWidth - 50);
@@ -68,8 +80,10 @@ function createBullet2() {
     bullet2.style.top = `-50px`;
     gameArea.appendChild(bullet2);
     bullet2s.push(bullet2);
+    shootSound.play();
   }
 }
+
 function moveBullet2() {
   bullet2s.forEach((bullet2, index) => {
     bullet2.style.top = `${bullet2.offsetTop + 5}px`;
@@ -79,6 +93,7 @@ function moveBullet2() {
     }
   });
 }
+
 function movePlayer() {
   if (keys['ArrowLeft'] && player.offsetLeft > 0) {
     player.style.left = `${player.offsetLeft - 10}px`;
@@ -97,6 +112,7 @@ function movePlayer() {
     player.style.left = `${touchPos - player.offsetWidth / 2}px`;
   }
 }
+
 function moveBullets() {
   bullets.forEach((bullet, index) => {
     bullet.style.top = `${bullet.offsetTop - 10}px`;
@@ -112,10 +128,12 @@ function moveBullets() {
         rocks.splice(rockIndex, 1);
         score++;
         scoreBoard.textContent = `Score: ${score}`;
+        hitSound.play();
       }
     });
   });
 }
+
 function isCollision(bullet, rock) {
   const bulletRect = bullet.getBoundingClientRect();
   const rockRect = rock.getBoundingClientRect();
@@ -126,6 +144,7 @@ function isCollision(bullet, rock) {
     bulletRect.left > rockRect.right
   );
 }
+
 function isCollision2(player, bullet2) {
   const playerRect = player.getBoundingClientRect();
   const bullet2Rect = bullet2.getBoundingClientRect();
@@ -136,6 +155,7 @@ function isCollision2(player, bullet2) {
     playerRect.left > bullet2Rect.right
   );
 }
+
 function isPlayerCollision(player, rock) {
   const playerRect = player.getBoundingClientRect();
   const rockRect = rock.getBoundingClientRect();
@@ -146,6 +166,7 @@ function isPlayerCollision(player, rock) {
     playerRect.left > rockRect.right
   );
 }
+
 function handlePlayerCollision() {
   rocks.forEach((rock, index) => {
     if (isPlayerCollision(player, rock)) {
@@ -155,9 +176,11 @@ function handlePlayerCollision() {
       audio.pause();
       score = 0;
       scoreBoard.textContent = `Score: ${score}`;
+      gameOverSound.play();
     }
   });
 }
+
 function handleBullet2Collision() {
   bullet2s.forEach((bullet2, bullet2Index) => {
     if (isCollision2(player, bullet2)) {
@@ -170,6 +193,7 @@ function handleBullet2Collision() {
       player.style.transform = 'scale(0.5)';
       bullets.forEach((b) => (b.style.backgroundColor = 'blue'));
       document.getElementById('gameArea').style.background ='url(giphy.webp)';
+      shootSound.play();
       function changeInterval() {
         clearInterval(intervalId);
         intervalId = setInterval(createBullet, 300);
@@ -178,14 +202,16 @@ function handleBullet2Collision() {
       setTimeout(() => {
         clearInterval(intervalId);
         player.style.boxShadow =  '0, 2rem, 1rem, #ffdd00e1';
+        shootSound.pause();
         player.style.transform = 'scale(1)';
         player.style.backgroundColor = '';
         bullets.forEach((b) => (b.style.backgroundColor = ''));
-        document.getElementById('gameArea').style.background = 'lightgray';
+        document.getElementById('gameArea').style.background = 'black';
       }, 20000);
     }
   });
 }
+
 function showGameOverModal(score) {
   const modal = document.getElementById('gameOverModal');
   const finalScore = document.getElementById('finalScore');
@@ -202,15 +228,16 @@ function showGameOverModal(score) {
     }
   };
 }
+
 function endGame() {
-  // Assuming you have a variable `score` that holds the player's score
   showGameOverModal(score);
   clearInterval(gameInterval);
   clearInterval(createRockInterval);
   clearInterval(createBullet2Interval);
   cancelAnimationFrame(animationFrameId);
+  gameOverSound.play();
 }
-// Call `endGame` function when the game is over
+
 function gameLoop() {
   movePlayer();
   moveBullets();
@@ -220,10 +247,13 @@ function gameLoop() {
   handlePlayerCollision();
   requestAnimationFrame(gameLoop);
 }
+
 function startGame() {
   startButton.style.display = 'none';
   gameArea.style.display = 'block';
   pauseButton.style.display = 'block';
+  audio.play();
+  shootSound.play();
   gameInterval = setInterval(createBullet, 300);
   createRockInterval = setInterval(createRock, 2000);
   createBullet2Interval = setInterval(createBullet2, 23000);
@@ -237,7 +267,6 @@ function startGame() {
     clearInterval(createRockInterval);
     createRockInterval = setInterval(createRock, 600);
   }, 28200);
-
 
   setTimeout(() => {
     clearInterval(createRockInterval);
@@ -254,26 +283,27 @@ function startGame() {
     createRockInterval = setInterval(createRock, 1300);
   }, 9100);
 
-  
   gameLoop();
 }
+
 function toggleSound() {
   if (audio.paused) {
     audio.play();
   } else {
     audio.pause();
   }
-}
+};
+
 function togglePause() {
   if (pauseButton.textContent === 'Pause') {
     pauseButton.textContent = 'Play';
     clearInterval(gameInterval);
     clearInterval(createRockInterval);
     clearInterval(createBullet2Interval);
-    audio.pause()
+    audio.pause();
     cancelAnimationFrame(gameLoop);
   } else {
-    audio.play() 
+    audio.play();
     pauseButton.textContent = 'Pause';
     gameInterval = setInterval(createBullet, 300);
     createRockInterval = setInterval(createRock, 2000);
