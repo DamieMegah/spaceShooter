@@ -19,16 +19,27 @@ let rockSpeed = 1;
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
 window.addEventListener('keyup', (e) => (keys[e.key] = false));
-gameArea.addEventListener('touchstart', handleTouchStart, false);
-gameArea.addEventListener('touchmove', handleTouchMove, false);
-gameArea.addEventListener('touchend', handleTouchEnd, false);
+window.addEventListener('touchstart', handleTouchStart);
+window.addEventListener('touchmove', handleTouchMove);
+window.addEventListener('touchend', handleTouchEnd);
+
+startButton.addEventListener('click', startGame);
+playButton.addEventListener('click', toggleSound);
+pauseButton.addEventListener('click', togglePause);
+
+function handleTouchStart(e) {
+  touchX = e.touches[0].clientX;
+}
+
+function handleTouchMove(e) {
+  touchX = e.touches[0].clientX;
+}
 
 let touchStartY = 0;
 let touchEndY = 0;
 
 function handleTouchStart(event) {
   touchStartY = event.touches[0].clientY;
-  touchX = event.touches[0].clientX;
 }
 
 function handleTouchMove(event) {
@@ -44,11 +55,6 @@ function handleTouchMove(event) {
   }
 
   touchStartY = touchEndY; // Update start position for continuous movement
-  touchX = event.touches[0].clientX;
-}
-
-function handleTouchEnd() {
-  touchX = null;
 }
 
 function movePlayerUp() {
@@ -63,6 +69,13 @@ function movePlayerDown() {
   if (playerTop < gameArea.offsetHeight - player.offsetHeight) {
     player.style.top = `${playerTop + 10}px`; // Adjust the value as needed
   }
+}
+
+gameArea.addEventListener('touchstart', handleTouchStart, false);
+gameArea.addEventListener('touchmove', handleTouchMove, false);
+
+function handleTouchEnd() {
+  touchX = null;
 }
 
 function createBullet() {
@@ -95,13 +108,15 @@ function moveRocks() {
 }
 
 function createBullet2() {
-  const x = Math.random() * (gameArea.offsetWidth - 50);
-  const bullet2 = document.createElement('div');
-  bullet2.className = 'bullet2';
-  bullet2.style.left = `${x}px`;
-  bullet2.style.top = `-50px`;
-  gameArea.appendChild(bullet2);
-  bullet2s.push(bullet2);
+  for (let i = 0; i < 1; i++) {
+    const x = Math.random() * (gameArea.offsetWidth - 50);
+    const bullet2 = document.createElement('div');
+    bullet2.className = 'bullet2';
+    bullet2.style.left = `${x}px`;
+    bullet2.style.top = `-50px`;
+    gameArea.appendChild(bullet2);
+    bullet2s.push(bullet2);
+  }
 }
 
 function moveBullet2() {
@@ -199,6 +214,7 @@ function handlePlayerCollision() {
     }
   });
 }
+
 
 function handleBullet2Collision() {
   bullet2s.forEach((bullet2, bullet2Index) => {
@@ -336,15 +352,4 @@ function togglePause() {
     createBullet2Interval = setInterval(createBullet2, 25000);
     gameLoop();
   }
-}
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then((registration) => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, (error) => {
-        console.log('ServiceWorker registration failed: ', error);
-      });
-  });
 }
