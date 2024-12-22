@@ -191,12 +191,14 @@ ul{
           <span class="close">&times;</span>
           <h2>Game Over</h2>
           <p id="finalScore"></p>
+          <audio id="gameOver" src="gameover.mp3" loop></audio>
         </div>
       </div>
 
   <button id="playButton">Sound</button>
   <button id="start">Start Game</button>
   <ul>
+    <li>YOUR MISSION IS TO DEFEND EARTH  FROM ASTEROIDS </li>
     <li> Shoot and aim at asteroid.</li>
     <li>dodge asteroid.</li>
     <li>collect the blue special bullet.</li>
@@ -210,6 +212,8 @@ ul{
     <div class="hscore">High Score: 1500</div>
     <button id="pauseButton">Pause</button>
     <button id="playButton">Sound</button>
+    
+    <audio id="space" src="spacemovement.mp3" loop></audio>
     <audio id="music" src="music1.mp3" loop></audio>
   </div>
   <script src="game.js"></script>
