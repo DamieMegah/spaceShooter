@@ -192,7 +192,8 @@ function handleBullet2Collision() {
       player.style.backgroundColor = 'blue';
       player.style.transform = 'scale(0.5)';
       bullets.forEach((b) => (b.style.backgroundColor = 'blue'));
-      document.getElementById('gameArea').style.background ='url(giphy.webp)';
+      document.getElementById('gameArea').style.backgroundImage ='url(giphy.webp)';
+      document.getElementById('gameArea').style.backgroundColor ='orange';
       shootSound.play();
       function changeInterval() {
         clearInterval(intervalId);
