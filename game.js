@@ -15,31 +15,19 @@ let gameInterval;
 let createRockInterval;
 let createBullet2Interval;
 let rockSpeed = 1;
-
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
 window.addEventListener('keyup', (e) => (keys[e.key] = false));
-window.addEventListener('touchstart', handleTouchStart);
-window.addEventListener('touchmove', handleTouchMove);
-window.addEventListener('touchend', handleTouchEnd);
-
-startButton.addEventListener('click', startGame);
-playButton.addEventListener('click', toggleSound);
-pauseButton.addEventListener('click', togglePause);
-
-function handleTouchStart(e) {
-  touchX = e.touches[0].clientX;
-}
-
-function handleTouchMove(e) {
-  touchX = e.touches[0].clientX;
-}
+gameArea.addEventListener('touchstart', handleTouchStart, false);
+gameArea.addEventListener('touchmove', handleTouchMove, false);
+gameArea.addEventListener('touchend', handleTouchEnd, false);
 
 let touchStartY = 0;
 let touchEndY = 0;
 
 function handleTouchStart(event) {
   touchStartY = event.touches[0].clientY;
+  touchX = event.touches[0].clientX;
 }
 
 function handleTouchMove(event) {
@@ -55,6 +43,11 @@ function handleTouchMove(event) {
   }
 
   touchStartY = touchEndY; // Update start position for continuous movement
+  touchX = event.touches[0].clientX;
+}
+
+function handleTouchEnd() {
+  touchX = null;
 }
 
 function movePlayerUp() {
@@ -70,14 +63,6 @@ function movePlayerDown() {
     player.style.top = `${playerTop + 10}px`; // Adjust the value as needed
   }
 }
-
-gameArea.addEventListener('touchstart', handleTouchStart, false);
-gameArea.addEventListener('touchmove', handleTouchMove, false);
-
-function handleTouchEnd() {
-  touchX = null;
-}
-
 function createBullet() {
   const bullet = document.createElement('div');
   bullet.className = 'bullet';
