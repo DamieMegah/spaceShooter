@@ -15,69 +15,24 @@ let gameInterval;
 let createRockInterval;
 let createBullet2Interval;
 let rockSpeed = 1;
-
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
 window.addEventListener('keyup', (e) => (keys[e.key] = false));
 window.addEventListener('touchstart', handleTouchStart);
 window.addEventListener('touchmove', handleTouchMove);
 window.addEventListener('touchend', handleTouchEnd);
-
 startButton.addEventListener('click', startGame);
 playButton.addEventListener('click', toggleSound);
 pauseButton.addEventListener('click', togglePause);
-
 function handleTouchStart(e) {
   touchX = e.touches[0].clientX;
 }
-
 function handleTouchMove(e) {
   touchX = e.touches[0].clientX;
 }
-
-let touchStartY = 0;
-let touchEndY = 0;
-
-function handleTouchStart(event) {
-  touchStartY = event.touches[0].clientY;
-}
-
-function handleTouchMove(event) {
-  touchEndY = event.touches[0].clientY;
-  const touchDiff = touchStartY - touchEndY;
-
-  if (touchDiff > 0) {
-    // Swipe up
-    movePlayerUp();
-  } else {
-    // Swipe down
-    movePlayerDown();
-  }
-
-  touchStartY = touchEndY; // Update start position for continuous movement
-}
-
-function movePlayerUp() {
-  const playerTop = player.offsetTop;
-  if (playerTop > 0) {
-    player.style.top = `${playerTop - 10}px`; // Adjust the value as needed
-  }
-}
-
-function movePlayerDown() {
-  const playerTop = player.offsetTop;
-  if (playerTop < gameArea.offsetHeight - player.offsetHeight) {
-    player.style.top = `${playerTop + 10}px`; // Adjust the value as needed
-  }
-}
-
-gameArea.addEventListener('touchstart', handleTouchStart, false);
-gameArea.addEventListener('touchmove', handleTouchMove, false);
-
 function handleTouchEnd() {
   touchX = null;
 }
-
 function createBullet() {
   const bullet = document.createElement('div');
   bullet.className = 'bullet';
@@ -86,7 +41,6 @@ function createBullet() {
   gameArea.appendChild(bullet);
   bullets.push(bullet);
 }
-
 function createRock() {
   const x = Math.random() * (gameArea.offsetWidth - 50);
   const rock = document.createElement('div');
@@ -96,7 +50,6 @@ function createRock() {
   gameArea.appendChild(rock);
   rocks.push(rock);
 }
-
 function moveRocks() {
   rocks.forEach((rock, index) => {
     rock.style.top = `${rock.offsetTop + rockSpeed}rem`;
@@ -106,7 +59,6 @@ function moveRocks() {
     }
   });
 }
-
 function createBullet2() {
   for (let i = 0; i < 1; i++) {
     const x = Math.random() * (gameArea.offsetWidth - 50);
@@ -118,7 +70,6 @@ function createBullet2() {
     bullet2s.push(bullet2);
   }
 }
-
 function moveBullet2() {
   bullet2s.forEach((bullet2, index) => {
     bullet2.style.top = `${bullet2.offsetTop + 5}px`;
@@ -128,7 +79,6 @@ function moveBullet2() {
     }
   });
 }
-
 function movePlayer() {
   if (keys['ArrowLeft'] && player.offsetLeft > 0) {
     player.style.left = `${player.offsetLeft - 10}px`;
@@ -147,7 +97,6 @@ function movePlayer() {
     player.style.left = `${touchPos - player.offsetWidth / 2}px`;
   }
 }
-
 function moveBullets() {
   bullets.forEach((bullet, index) => {
     bullet.style.top = `${bullet.offsetTop - 10}px`;
@@ -155,7 +104,6 @@ function moveBullets() {
       bullet.remove();
       bullets.splice(index, 1);
     }
-
     rocks.forEach((rock, rockIndex) => {
       if (isCollision(bullet, rock)) {
         bullet.remove();
@@ -168,7 +116,6 @@ function moveBullets() {
     });
   });
 }
-
 function isCollision(bullet, rock) {
   const bulletRect = bullet.getBoundingClientRect();
   const rockRect = rock.getBoundingClientRect();
@@ -179,7 +126,6 @@ function isCollision(bullet, rock) {
     bulletRect.left > rockRect.right
   );
 }
-
 function isCollision2(player, bullet2) {
   const playerRect = player.getBoundingClientRect();
   const bullet2Rect = bullet2.getBoundingClientRect();
@@ -190,7 +136,6 @@ function isCollision2(player, bullet2) {
     playerRect.left > bullet2Rect.right
   );
 }
-
 function isPlayerCollision(player, rock) {
   const playerRect = player.getBoundingClientRect();
   const rockRect = rock.getBoundingClientRect();
@@ -201,7 +146,6 @@ function isPlayerCollision(player, rock) {
     playerRect.left > rockRect.right
   );
 }
-
 function handlePlayerCollision() {
   rocks.forEach((rock, index) => {
     if (isPlayerCollision(player, rock)) {
@@ -214,8 +158,6 @@ function handlePlayerCollision() {
     }
   });
 }
-
-
 function handleBullet2Collision() {
   bullet2s.forEach((bullet2, bullet2Index) => {
     if (isCollision2(player, bullet2)) {
@@ -223,9 +165,7 @@ function handleBullet2Collision() {
       bullet2s.splice(bullet2Index, 1);
       score += 5;
       scoreBoard.textContent = `Score: ${score}`;
-
       let intervalId = setInterval(createBullet, 190);
-      
       player.style.backgroundColor = 'blue';
       player.style.transform = 'scale(0.5)';
       bullets.forEach((b) => (b.style.backgroundColor = 'blue'));
@@ -234,9 +174,7 @@ function handleBullet2Collision() {
         clearInterval(intervalId);
         intervalId = setInterval(createBullet, 300);
       }
-
       setTimeout(changeInterval, 9000);
-
       setTimeout(() => {
         clearInterval(intervalId);
         player.style.boxShadow =  '0, 2rem, 1rem, #ffdd00e1';
@@ -248,7 +186,6 @@ function handleBullet2Collision() {
     }
   });
 }
-
 function showGameOverModal(score) {
   const modal = document.getElementById('gameOverModal');
   const finalScore = document.getElementById('finalScore');
@@ -259,14 +196,12 @@ function showGameOverModal(score) {
   closeButton.onclick = function() {
     modal.style.display = 'none';
   };
-
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = 'none';
     }
   };
 }
-
 function endGame() {
   // Assuming you have a variable `score` that holds the player's score
   showGameOverModal(score);
@@ -275,9 +210,7 @@ function endGame() {
   clearInterval(createBullet2Interval);
   cancelAnimationFrame(animationFrameId);
 }
-
 // Call `endGame` function when the game is over
-
 function gameLoop() {
   movePlayer();
   moveBullets();
@@ -285,49 +218,23 @@ function gameLoop() {
   moveBullet2();
   handleBullet2Collision();
   handlePlayerCollision();
-
   requestAnimationFrame(gameLoop);
 }
-
 function startGame() {
   startButton.style.display = 'none';
   gameArea.style.display = 'block';
   pauseButton.style.display = 'block';
   gameInterval = setInterval(createBullet, 300);
-  createRockInterval = setInterval(createRock, 2100);
+  createRockInterval = setInterval(createRock, 2000);
   createBullet2Interval = setInterval(createBullet2, 23000);
-
   setInterval(() => {
     if (rockSpeed  < 40) {
       rockSpeed += 10; // Increase rock speed every interval
     }
   }, 500);
-
   
-  setTimeout(() => {
-    clearInterval(createRockInterval);
-    createRockInterval = setInterval(createRock, 600);
-  }, 28200);
-  
-
-  setTimeout(() => {
-    clearInterval(createRockInterval);
-    createRockInterval = setInterval(createRock, 900);
-  }, 19800);
-  
-  setTimeout(() => {
-    clearInterval(createRockInterval);
-    createRockInterval = setInterval(createRock, 1100);
-  }, 11500);
-  
-  setTimeout(() => {
-    clearInterval(createRockInterval);
-    createRockInterval = setInterval(createRock, 1300);
-  }, 9100);
-
   gameLoop();
 }
-
 function toggleSound() {
   if (audio.paused) {
     audio.play();
@@ -335,7 +242,6 @@ function toggleSound() {
     audio.pause();
   }
 }
-
 function togglePause() {
   if (pauseButton.textContent === 'Pause') {
     pauseButton.textContent = 'Play';
