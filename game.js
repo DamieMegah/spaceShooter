@@ -35,6 +35,45 @@ function handleTouchMove(e) {
   touchX = e.touches[0].clientX;
 }
 
+let touchStartY = 0;
+let touchEndY = 0;
+
+function handleTouchStart(event) {
+  touchStartY = event.touches[0].clientY;
+}
+
+function handleTouchMove(event) {
+  touchEndY = event.touches[0].clientY;
+  const touchDiff = touchStartY - touchEndY;
+
+  if (touchDiff > 0) {
+    // Swipe up
+    movePlayerUp();
+  } else {
+    // Swipe down
+    movePlayerDown();
+  }
+
+  touchStartY = touchEndY; // Update start position for continuous movement
+}
+
+function movePlayerUp() {
+  const playerTop = player.offsetTop;
+  if (playerTop > 0) {
+    player.style.top = `${playerTop - 10}px`; // Adjust the value as needed
+  }
+}
+
+function movePlayerDown() {
+  const playerTop = player.offsetTop;
+  if (playerTop < gameArea.offsetHeight - player.offsetHeight) {
+    player.style.top = `${playerTop + 10}px`; // Adjust the value as needed
+  }
+}
+
+gameArea.addEventListener('touchstart', handleTouchStart, false);
+gameArea.addEventListener('touchmove', handleTouchMove, false);
+
 function handleTouchEnd() {
   touchX = null;
 }
@@ -186,7 +225,7 @@ function handleBullet2Collision() {
       scoreBoard.textContent = `Score: ${score}`;
 
       let intervalId = setInterval(createBullet, 190);
-
+      
       player.style.backgroundColor = 'blue';
       player.style.transform = 'scale(0.5)';
       bullets.forEach((b) => (b.style.backgroundColor = 'blue'));
@@ -254,9 +293,8 @@ function startGame() {
   startButton.style.display = 'none';
   gameArea.style.display = 'block';
   pauseButton.style.display = 'block';
-
   gameInterval = setInterval(createBullet, 300);
-  createRockInterval = setInterval(createRock, 2000);
+  createRockInterval = setInterval(createRock, 2100);
   createBullet2Interval = setInterval(createBullet2, 23000);
 
   setInterval(() => {
@@ -266,6 +304,27 @@ function startGame() {
   }, 500);
 
   
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 600);
+  }, 28200);
+  
+
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 900);
+  }, 19800);
+  
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 1100);
+  }, 11500);
+  
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 1300);
+  }, 9100);
+
   gameLoop();
 }
 

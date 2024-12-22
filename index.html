@@ -9,6 +9,7 @@
   <link rel="icon" href="emoji.jpg" type="image/jpg">
   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link rel="shortcut icon" href="emoji.jpg" type="image/jpg">
+  <link rel="manifest" href="manifest.json">
   <title>Space Shooter Game</title>
   <style>
     html { font-size: 95%; }
@@ -57,7 +58,7 @@
       width: 10px;
       height: 10px;
       border-radius: 2rem 2rem 0 0;
-      box-shadow: 0 2rem 0.2rem yellow;
+      box-shadow: 0 .9rem 0.9rem yellow;
       background-color: red;
       position: absolute;
     }
@@ -68,11 +69,11 @@
       border-radius: 3rem 3rem 0 0;
       box-shadow: 0 2rem 1rem #ffb200d8;
       background: blue;
-      animation: move 25s ease-out infinite;
+      animation: move 20s ease-out infinite;
     }
     @keyframes move {
       0% { top: 0rem; }
-      100% { top: 200rem; }
+      100% { top: 100rem; }
     }
 
     
@@ -83,13 +84,14 @@
       border: .1px ridge rgb(233, 165, 165);
       border-radius: 0.9rem 0.3rem 0.8rem 0.2rem;
       background: grey;
-      animation: move 30s ease-out infinite;
+      animation: move 10s ease-out infinite;
     }
     #score {
       position: relative;
-      color: rgb(98, 250, 52);
+      color: green;
       font-size: 1.5rem;
-      left: 10rem;
+      left: 18rem;
+      
     }
     .hscore {
       position: fixed;
@@ -117,12 +119,12 @@
       transform: translate(-50%, -50%);
     }
     #pauseButton {
-      bottom: 20px;
+      top: 20px;
       left: 10px;
       display: none; /* Hide initially */
     }
     #playButton {
-      bottom: 20px;
+      top: 20px;
       right: 10px;
     }
 
@@ -210,6 +212,18 @@ ul{
     <audio id="music" src="music1.mp3" loop></audio>
   </div>
   <script src="game.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
 
