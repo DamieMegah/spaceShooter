@@ -14,7 +14,7 @@ const pauseButton = document.getElementById('pauseButton');
 let gameInterval;
 let createRockInterval;
 let createBullet2Interval;
-let rockSpeed = 5;
+let rockSpeed = 1;
 
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
@@ -60,7 +60,7 @@ function createRock() {
 
 function moveRocks() {
   rocks.forEach((rock, index) => {
-    rock.style.top = `${rock.offsetTop + rockSpeed}px`;
+    rock.style.top = `${rock.offsetTop + rockSpeed}rem`;
     if (rock.offsetTop > gameArea.offsetHeight) {
       rock.remove();
       rocks.splice(index, 1);
@@ -166,7 +166,7 @@ function isPlayerCollision(player, rock) {
 function handlePlayerCollision() {
   rocks.forEach((rock, index) => {
     if (isPlayerCollision(player, rock)) {
-      alert('Game Over!');
+      endGame();
       rock.remove();
       rocks.splice(index, 1);
       audio.pause();
@@ -175,6 +175,7 @@ function handlePlayerCollision() {
     }
   });
 }
+
 
 function handleBullet2Collision() {
   bullet2s.forEach((bullet2, bullet2Index) => {
@@ -187,10 +188,9 @@ function handleBullet2Collision() {
       let intervalId = setInterval(createBullet, 190);
 
       player.style.backgroundColor = 'blue';
-      player.style.boxShadow = '0 2rem 1px #40ff8cc7';
       player.style.transform = 'scale(0.5)';
       bullets.forEach((b) => (b.style.backgroundColor = 'blue'));
-
+      document.getElementById('gameArea').style.background ='url(giphy.webp)';
       function changeInterval() {
         clearInterval(intervalId);
         intervalId = setInterval(createBullet, 300);
@@ -200,14 +200,44 @@ function handleBullet2Collision() {
 
       setTimeout(() => {
         clearInterval(intervalId);
-        player.style.boxShadow = '0 3rem 1px #ffdc00';
+        player.style.boxShadow =  '0, 2rem, 1rem, #ffdd00e1';
         player.style.transform = 'scale(1)';
         player.style.backgroundColor = '';
-        bullets.forEach((b) => (b.style.backgroundColor = 'red'));
+        bullets.forEach((b) => (b.style.backgroundColor = ''));
+        document.getElementById('gameArea').style.background = 'lightgray';
       }, 20000);
     }
   });
 }
+
+function showGameOverModal(score) {
+  const modal = document.getElementById('gameOverModal');
+  const finalScore = document.getElementById('finalScore');
+  finalScore.textContent = `Your final score is: ${score}`;
+  modal.style.display = 'block';
+  startButton.display = 'block';
+  const closeButton = document.getElementsByClassName('close')[0];
+  closeButton.onclick = function() {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  };
+}
+
+function endGame() {
+  // Assuming you have a variable `score` that holds the player's score
+  showGameOverModal(score);
+  clearInterval(gameInterval);
+  clearInterval(createRockInterval);
+  clearInterval(createBullet2Interval);
+  cancelAnimationFrame(animationFrameId);
+}
+
+// Call `endGame` function when the game is over
 
 function gameLoop() {
   movePlayer();
@@ -227,14 +257,15 @@ function startGame() {
 
   gameInterval = setInterval(createBullet, 300);
   createRockInterval = setInterval(createRock, 2000);
-  createBullet2Interval = setInterval(createBullet2, 25000);
+  createBullet2Interval = setInterval(createBullet2, 23000);
 
   setInterval(() => {
-    if (rockSpeed < 20) {
-      rockSpeed += 1; // Increase rock speed every interval
+    if (rockSpeed  < 40) {
+      rockSpeed += 10; // Increase rock speed every interval
     }
-  }, 5000);
+  }, 500);
 
+  
   gameLoop();
 }
 

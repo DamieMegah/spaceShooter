@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="icon" href="emoji.jpg" type="image/jpg">
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <link rel="shortcut icon" href="emoji.jpg" type="image/jpg">
   <title>Space Shooter Game</title>
   <style>
     html { font-size: 95%; }
+    *{
+        transition: all 3ms ease;
+    }
     body {
       margin: 0;
       overflow: hidden;
+      width: 100vw;
       background: black;
       position: relative;
-      padding: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,26 +28,36 @@
     #gameArea {
       position: fixed;
       top: 0;
-      width: 26rem;
-      height: 46rem;
-      background-color: lightgray;
+      width: 60vw;
+      height: 100vh;
+      background: lightgray;
       overflow: hidden;
       display: none; /* Hide initially */
     }
     #player {
       position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 30px;
       height: 30px;
-      background: red;
+      background: rgba(255, 0, 0, 0.007);
       bottom: 20px;
-      box-shadow: 0 2rem 1rem #ffdc00;
+      box-shadow: 0 2rem 1rem #ffdd00e1;
       left: calc(50% - 15px);
+    }
+
+    #player .fas{
+       font-size: 3rem;
+       -webkit-text-fill-color:rgb(106, 163, 95);
+      -webkit-text-stroke: 1.5px  goldenrod;
+      
     }
     .bullet {
       width: 10px;
       height: 10px;
       border-radius: 2rem 2rem 0 0;
-      box-shadow: 0 2rem 1rem yellow;
+      box-shadow: 0 2rem 0.2rem yellow;
       background-color: red;
       position: absolute;
     }
@@ -55,25 +74,29 @@
       0% { top: 0rem; }
       100% { top: 200rem; }
     }
+
+    
     .rock {
       position: absolute;
       width: 30px;
       height: 30px;
+      border: .1px ridge rgb(233, 165, 165);
+      border-radius: 0.9rem 0.3rem 0.8rem 0.2rem;
       background: grey;
-      animation: move 35s ease-out infinite;
+      animation: move 30s ease-out infinite;
     }
     #score {
       position: relative;
-      color: black;
+      color: rgb(98, 250, 52);
       font-size: 1.5rem;
-      left: 2rem;
+      left: 10rem;
     }
     .hscore {
       position: fixed;
       color: goldenrod;
       font-size: 1.5rem;
       top: 0rem;
-      left: 15rem;
+      left: 25rem;
     }
     #playButton, #pauseButton, #start {
       padding: 10px 20px;
@@ -102,12 +125,84 @@
       bottom: 20px;
       right: 10px;
     }
+
+    .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 50%; 
+  height: 60%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+  background-color: #8a8787;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #f30909;
+  width: 80%; 
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul{
+    color: white;
+    position: absolute;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    top: 4rem;
+
+}
+
+
+@media (min-width:320px) and (max-width:890px) {
+    html{
+    font-size: 60%;}
+
+    #gameArea{
+        height: 92vh;
+        width: 99vw;
+    }
+}
   </style>
 </head>
 <body>
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Game Over</h2>
+          <p id="finalScore"></p>
+        </div>
+      </div>
+
+  <button id="playButton">Sound</button>
   <button id="start">Start Game</button>
+  <ul>
+    <li> Shoot and aim at asteroid.</li>
+    <li>dodge asteroid.</li>
+    <li>collect the blue special bullet.</li>
+    <li>beat the highscore.</li>
+    
+  </ul>
+  
   <div id="gameArea">
-    <div id="player"></div>
+    <div id="player" ><i class="fas fa-jet-fighter-up"></i></div>
     <div id="score">Score: 00</div>
     <div class="hscore">High Score: 1500</div>
     <button id="pauseButton">Pause</button>
@@ -117,3 +212,5 @@
   <script src="game.js"></script>
 </body>
 </html>
+
+
