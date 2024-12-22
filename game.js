@@ -15,6 +15,7 @@ let gameInterval;
 let createRockInterval;
 let createBullet2Interval;
 let rockSpeed = 1;
+
 // Event Listeners
 window.addEventListener('keydown', (e) => (keys[e.key] = true));
 window.addEventListener('keyup', (e) => (keys[e.key] = false));
@@ -63,6 +64,7 @@ function movePlayerDown() {
     player.style.top = `${playerTop + 10}px`; // Adjust the value as needed
   }
 }
+
 function createBullet() {
   const bullet = document.createElement('div');
   bullet.className = 'bullet';
@@ -93,15 +95,13 @@ function moveRocks() {
 }
 
 function createBullet2() {
-  for (let i = 0; i < 1; i++) {
-    const x = Math.random() * (gameArea.offsetWidth - 50);
-    const bullet2 = document.createElement('div');
-    bullet2.className = 'bullet2';
-    bullet2.style.left = `${x}px`;
-    bullet2.style.top = `-50px`;
-    gameArea.appendChild(bullet2);
-    bullet2s.push(bullet2);
-  }
+  const x = Math.random() * (gameArea.offsetWidth - 50);
+  const bullet2 = document.createElement('div');
+  bullet2.className = 'bullet2';
+  bullet2.style.left = `${x}px`;
+  bullet2.style.top = `-50px`;
+  gameArea.appendChild(bullet2);
+  bullet2s.push(bullet2);
 }
 
 function moveBullet2() {
@@ -199,7 +199,6 @@ function handlePlayerCollision() {
     }
   });
 }
-
 
 function handleBullet2Collision() {
   bullet2s.forEach((bullet2, bullet2Index) => {
@@ -338,7 +337,6 @@ function togglePause() {
     gameLoop();
   }
 }
-
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
