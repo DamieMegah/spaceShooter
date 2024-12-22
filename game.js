@@ -232,6 +232,28 @@ function startGame() {
       rockSpeed += 10; // Increase rock speed every interval
     }
   }, 500);
+
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 600);
+  }, 28200);
+
+
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 900);
+  }, 19800);
+
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 1100);
+  }, 11500);
+
+  setTimeout(() => {
+    clearInterval(createRockInterval);
+    createRockInterval = setInterval(createRock, 1300);
+  }, 9100);
+
   
   gameLoop();
 }
